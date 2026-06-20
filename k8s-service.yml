@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: examen-devops-service
 spec:
-  type: NodePort # Perfect for local testing clusters like Minikube/Kind
+  type: NodePort
   selector:
-    app: ticket-api
+    app: ticket-api  # This must match the label in your k8s-deployment.yml template
   ports:
     - protocol: TCP
-      port: 80       # Port exposed inside the cluster
-      targetPort: 8000 # Port the FastAPI app runs on inside the container
-      nodePort: 30080 # Port accessible from your web browser locally
+      port: 8000       # The port inside the cluster
+      targetPort: 8000 # The port your FastAPI app runs on inside the container
+      nodePort: 30080  # Fixed port for Docker Desktop localhost access

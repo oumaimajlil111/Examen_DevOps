@@ -16,9 +16,8 @@ spec:
     spec:
       containers:
       - name: ticket-api-container
-        # Replace with your actual GHCR image path after your pipeline runs
-        image: ghcr.io/oumaimajlil111/examen-devops/examen-devops:latest
-        imagePullPolicy: Always
+        image: examen-devops:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
         resources:

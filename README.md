@@ -61,12 +61,28 @@ git clone https://github.com/oumaimajlil111/Examen_DevOps.git
 cd Examen_DevOps
 ```
 
-2. Ensure you have a local Kubernetes cluster running (Minikube, Kind, or MicroK8s):
+2. Build the local image with the proper tag:
 ```bash
-# For Minikube
-minikube start
+docker build -t examen-devops:latest .
+```
 
-# For Kind
+3. Ensure you have a local Kubernetes cluster running:
+
+**Option A: Docker Desktop with Kubernetes enabled**
+- Open Docker Desktop
+- Go to Settings → Kubernetes
+- Enable Kubernetes
+- **Important**: Under "Cluster Settings", select "kubernetes" (NOT "kind")
+- Click "Apply & Restart"
+- Wait for Kubernetes to start
+
+**Option B: Minikube**
+```bash
+minikube start
+```
+
+**Option C: Kind**
+```bash
 kind create cluster
 ```
 
@@ -87,15 +103,33 @@ kubectl get services
 ```
 
 5. Access the API:
-```bash
-# The API is available on port 30080
-# For Minikube, get the URL:
-minikube service examen-devops-service --url
 
+**For Docker Desktop Kubernetes:**
+```bash
+# The API is accessible directly via localhost
+# Access the API at: http://localhost:30080/docs
+```
+
+**For Minikube:**
+```bash
+# Get the service URL
+minikube service examen-devops-service --url
 # Or access directly: http://localhost:30080
 ```
 
-The API will be available at `http://localhost:30080/docs`
+**For Kind:**
+```bash
+# Get the node port and access via the node IP
+kubectl get services examen-devops-service
+# Access via: http://<NODE_IP>:30080/docs
+```
+
+The API will be available at `http://localhost:30080/docs` for Docker Desktop and Minikube
+
+If you need to reapply the service configuration after making changes:
+```bash
+kubectl apply -f k8s-service.yml
+```
 
 ## Testing
 
@@ -176,3 +210,21 @@ Examen_DevOps/
 **Import errors:**
 - Make sure you're running from the project root directory
 - Verify all dependencies are installed
+
+**Fatal error in launcher (Windows Python reinstall issue):**
+```
+Fatal error in launcher: Unable to create process using '"C:\Program Files\Python310\python.exe"  "C:\Users\i\AppData\Roaming\Python\Python310\Scripts\uvicorn.exe" app.main:app --reload --host 0.0.0.0 --port 8000': The system cannot find the file specified.
+```
+This happens when you uninstall an older Python version and install a fresh one on Windows. Windows keeps a dirty caching shortcut (uvicorn.exe) in your roaming app data folder that points to the old, deleted Python path.
+
+**Solution:**
+- Delete the stale cache folder: `C:\Users\{your_username}\AppData\Roaming\Python\Python310\Scripts\`
+- Reinstall uvicorn: `pip install uvicorn`
+- Or use the Python module directly: `python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
+- Or use a virtual environment (venv) to avoid system-wide cache issues:
+  ```bash
+  python -m venv venv
+  venv\Scripts\activate  # On Windows
+  pip install -r requirements.txt
+  uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+  ```
