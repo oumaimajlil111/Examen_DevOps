@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: examen-devops-deployment
+  labels:
+    app: ticket-api
+spec:
+  replicas: 2 # Launches two parallel instances for high availability
+  selector:
+    matchLabels:
+      app: ticket-api
+  template:
+    metadata:
+      labels:
+        app: ticket-api
+    spec:
+      containers:
+      - name: ticket-api-container
+        # Replace with your actual GHCR image path after your pipeline runs
+        image: ghcr.io/oumaimajlil111/examen-devops/examen-devops:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
