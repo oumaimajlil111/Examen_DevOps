@@ -153,6 +153,8 @@ Examen_DevOps/
 │   └── test_main.py     # Test suite
 ├── Dockerfile           # Docker configuration
 ├── docker-compose.yml   # Docker Compose setup
+├── k8s-deployment.yml   # Kubernetes deployment configuration
+├── k8s-service.yml      # Kubernetes service configuration
 ├── requirements.txt     # Python dependencies
 └── README.md           # This file
 ```
