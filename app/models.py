@@ -1,12 +1,14 @@
-from sqlalchemy import Column, Integer, String, Text
-from .database import Base
+from sqlalchemy import Column, Integer, String
+from app.database import Base
+
 
 class Ticket(Base):
     __tablename__ = "tickets"
 
-    id = Column(Integer, primary key=True, index=True)
-    title = Column(String, nullable=False, index=True)
-    description = Column(Text, nullable=True)
-    priority = Column(String, nullable=False)  # "High", "Medium", "Low"
-    status = Column(String, nullable=False, default="Ouvert")  # "Ouvert", "En cours", "Résolu", "Fermé"
-    response = Column(String, nullable=True)  # Managed by Student B
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    username = Column(String, nullable=False)
+    # Status values: Ouvert, En cours, Résolu, Fermé
+    status = Column(String, default="Ouvert", nullable=False)
+    response = Column(String, nullable=True)  # Response message from agent

@@ -1,21 +1,26 @@
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, Literal
-from pydantic import BaseModel, ConfigDict
 
-class TicketBase(BaseModel):
-    title: str
-    description: Optional[str] = None
-    priority: Literal["High", "Medium", "Low"]
+StatusType = Literal["Ouvert", "En cours", "Résolu", "Fermé"]
 
-class TicketCreate(TicketBase):
-    pass
+
+class TicketCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=100)
+    description: str = Field(..., min_length=1)
+    username: str = Field(..., min_length=1, max_length=50)
+
 
 class TicketUpdate(BaseModel):
     status: str
     response: Optional[str] = None
 
-class TicketResponse(TicketBase):
+
+class Ticket(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
+    title: str
+    description: str
+    username: str
     status: str
     response: Optional[str] = None
-
-    model_config = ConfigDict(from_attributes=True)
